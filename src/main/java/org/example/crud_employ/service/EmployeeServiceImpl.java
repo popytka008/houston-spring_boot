@@ -1,44 +1,49 @@
 package org.example.crud_employ.service;
 
-import org.example.crud_employ.dao.IEmployeeDao;
+import org.example.crud_employ.dao.IEmployeeRepository;
 import org.example.crud_employ.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
+
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-@Repository
+@Service
 public class EmployeeServiceImpl implements IEmployeeService {
 
-    private IEmployeeDao dao;
+    private final IEmployeeRepository repo;
 
 
     //-----------КОНСТРУКТОРЫ
     @Autowired
-    public EmployeeServiceImpl(IEmployeeDao dao) {
-        this.dao = dao;
+    public EmployeeServiceImpl(IEmployeeRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public List<Employee> findAll() {
-        return this.dao.findAll();
+        return this.repo.findAll();
     }
 
     @Override
     public Employee findEmployeeById(int id) {
-        return this.dao.findEmployeeById( id );
+
+        var item = this.repo.findById(id);
+
+        if ( item.isPresent()) return item.get();
+        else throw new NoSuchElementException(
+                String.format("Неудачный запрос БД. Работник по ID : %d не найден!", id )
+        );
     }
 
     @Override
-    @Transactional
     public Employee save(Employee employee) {
-        return this.dao.save( employee );
+        return this.repo.save( employee );
     }
 
     @Override
-    @Transactional
-    public void deleteEmployeeById(int id) {
-        this.dao.deleteEmployeeById( id );
+    public void deleteById(int id) {
+        this.repo.deleteById( id );
     }
 }

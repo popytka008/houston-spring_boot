@@ -1,6 +1,5 @@
 package org.example.crud_employ.rest;
 
-import org.example.crud_employ.dao.IEmployeeDao;
 import org.example.crud_employ.entity.Employee;
 import org.example.crud_employ.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class EmployeeRestController {
 
-    private IEmployeeService service;
+    private final IEmployeeService service;
 
     //----ОНСТРУКТОРЫ
     @Autowired
@@ -59,7 +58,7 @@ public class EmployeeRestController {
         this.catchEmplyeeIdError( id );
 
         var e = this.service.findEmployeeById( id );
-        this.service.deleteEmployeeById( id );
+        this.service.deleteById( id );
 
         return "Запись удалена: " + e;
     }
