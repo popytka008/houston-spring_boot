@@ -1,6 +1,5 @@
 package org.example.crud_employ.rest;
 
-import org.example.crud_employ.dao.IEmployeeDao;
 import org.example.crud_employ.entity.Employee;
 import org.example.crud_employ.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +21,19 @@ public class EmployeeRestController {
 
 
     //----МЕТОДЫ
+    //SELECT *
     @GetMapping("/employees")
     public List<Employee> findAll(){
         return this.service.findAll();
     }
 
+    //SELECT 1 WHERE ID=<id>
     @GetMapping("/employees/{idx}")
     public Employee getEmployee(@PathVariable(value = "idx") int id){
 
         this.catchEmplyeeIdError( id );
 
-        return this.service.findEmployeeById( id );
+        return this.service.findById( id );
     }
 
     public void catchEmplyeeIdError(int id) {
@@ -42,40 +43,25 @@ public class EmployeeRestController {
                     "Индекс имеет недопустимое значение : " + id
             );
     }
-
+    //INSERT 1
     @PostMapping("/employees")
     public Employee addEmployee(@RequestBody Employee e ){
         return this.service.save( e );
     }
-
+    //UPDATE 1 WHERE ID=<id>
     @PutMapping("/employees")
     public Employee updateEmployee(@RequestBody Employee e ){
         return this.service.save( e );
     }
-
+    //DELETE 1 WHERE ID=<id>
     @DeleteMapping("/employees/{idx}")
     public String deleteEmployee(@PathVariable(value = "idx") int id){
 
         this.catchEmplyeeIdError( id );
 
-        var e = this.service.findEmployeeById( id );
-        this.service.deleteEmployeeById( id );
+        var e = this.service.findById( id );
+        this.service.deleteById( id );
 
         return "Запись удалена: " + e;
     }
-    //
-//    private IEmployeeDao dao;
-//
-//    //----ОНСТРУКТОРЫ
-//    @Autowired
-//    public EmployeeRestController(IEmployeeDao dao) {
-//        this.dao = dao;
-//    }
-//
-//
-//    //-- ОБЩИЕ МЕТОДЫ
-//    @GetMapping("/employees")
-//    public List<Employee> findAll(){
-//        return this.dao.findAll();
-//    }
 }

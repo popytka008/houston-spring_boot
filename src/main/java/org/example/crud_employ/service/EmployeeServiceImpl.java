@@ -1,6 +1,6 @@
 package org.example.crud_employ.service;
 
-import org.example.crud_employ.dao.IEmployeeDao;
+import org.example.crud_employ.dao.EmployeeRepository;
 import org.example.crud_employ.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,34 +11,42 @@ import java.util.List;
 @Repository
 public class EmployeeServiceImpl implements IEmployeeService {
 
-    private IEmployeeDao dao;
+    private EmployeeRepository repo;
 
 
     //-----------КОНСТРУКТОРЫ
     @Autowired
-    public EmployeeServiceImpl(IEmployeeDao dao) {
-        this.dao = dao;
+    public EmployeeServiceImpl(EmployeeRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public List<Employee> findAll() {
-        return this.dao.findAll();
+        return this.repo.findAll();
     }
 
     @Override
-    public Employee findEmployeeById(int id) {
-        return this.dao.findEmployeeById( id );
+    public Employee findById(int id) {
+        var item = this.repo.findById( id );
+
+        if ( item.isPresent() ){
+            return item.get();
+        }
+
+        throw new RuntimeException(
+                "Не правильная операция: Такой ID = " + id + " не подходит для выборки данных!!!"
+        );
     }
 
     @Override
     @Transactional
     public Employee save(Employee employee) {
-        return this.dao.save( employee );
+        return this.repo.save( employee );
     }
 
     @Override
     @Transactional
-    public void deleteEmployeeById(int id) {
-        this.dao.deleteEmployeeById( id );
+    public void deleteById(int id) {
+        this.repo.deleteById( id );
     }
 }

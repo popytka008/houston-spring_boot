@@ -15,19 +15,19 @@ public class MySecurityConfiguration {
 
         UserDetails details1 = User.builder()
                 .username("ivan")
-                .password("{noop}test123")
+                .password("{noop}test")
                 .roles("EMPLOYEE")
                 .build();
 
         UserDetails details2 = User.builder()
                 .username("oleg")
-                .password("{noop}test123")
+                .password("{noop}test")
                 .roles("EMPLOYEE", "MANAGER")
                 .build();
 
         UserDetails details3 = User.builder()
                 .username("inna")
-                .password("{noop}test123")
+                .password("{noop}test")
                 .roles("EMPLOYEE", "MANAGER", "ADMIN")
                 .build();
 
